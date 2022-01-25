@@ -1,9 +1,6 @@
-#include <deprecated.h>
 #include <MFRC522.h>
 #include <MFRC522Extended.h>
-#include <require_cpp11.h>
 #include "SPI.h"
-#include "MFRC522.h"
 #include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
@@ -11,9 +8,6 @@
 
 #define SS_PIN 10
 #define RST_PIN 9
-
-
-Servo myservo;
 
 int green_led = 4;
 int red_led = 5;
@@ -30,7 +24,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
-MFRC522::MIFARE_Key key;
+Servo myservo;
 
 void setup() {
   Serial.begin(9600);
@@ -75,7 +69,6 @@ void loop() {
     {
       lcd.clear();
       lcd.print("Kartya elfogadva");
-      Serial.println("**Authorised acces**");
       digitalWrite(green_led, HIGH);
       myservo.write(90);
       delay(5000);
@@ -84,8 +77,6 @@ void loop() {
     }
     else 
     {   
-      Serial.println("**Acces denied**");
-
       lcd.clear();
       lcd.print("Kartya elutasitva");
       digitalWrite(red_led, HIGH);

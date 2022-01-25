@@ -2,13 +2,11 @@
 #include <MFRC522.h>
 #include <MFRC522Extended.h>
 #include <require_cpp11.h>
-
 #include "SPI.h"
 #include "MFRC522.h"
 #include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <Vector.h>
 #include <NewPing.h>
 
 #define SS_PIN 10
@@ -20,19 +18,13 @@ Servo myservo;
 int green_led = 4;
 int red_led = 5;
 
-int blueButtonValue = 0;
-int redButtonValue = 0;
-int blueButton = 2;
-int redButton = 3;
-
 int trigPin = 7;
 int echoPin = 8;
 int maxDistance = 20;
 
-NewPing sonar(trigPin, echoPin, maxDistance);
+const String regiszteredCard = "73:5F:AA:09";
 
-const byte maxCardNumber = 11;
-String tagList[maxCardNumber];
+NewPing sonar(trigPin, echoPin, maxDistance);
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -79,16 +71,14 @@ void loop() {
     strID.toUpperCase();
     delay(500);
   
-    if (strID.indexOf("73:5F:AA:09") >= 0)
+    if (strID.indexOf(regiszteredCard) >= 0)
     {
-      Serial.println("**Authorised acces**");
-
       lcd.clear();
       lcd.print("Kartya elfogadva");
-   
+      Serial.println("**Authorised acces**");
       digitalWrite(green_led, HIGH);
       myservo.write(90);
-      delay(2000);
+      delay(5000);
       digitalWrite(green_led, LOW);
       myservo.write(0);
     }
@@ -98,9 +88,8 @@ void loop() {
 
       lcd.clear();
       lcd.print("Kartya elutasitva");
-      
       digitalWrite(red_led, HIGH);
-      delay(1000);
+      delay(5000);
       digitalWrite(red_led, LOW);
     }
   }
